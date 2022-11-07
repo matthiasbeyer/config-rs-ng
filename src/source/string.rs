@@ -27,7 +27,7 @@ where
     SourceError: From<<<P as FormatParser>::Output as IntoConfigElement>::Error>,
 {
     fn load(&self) -> Result<ConfigObject, SourceError> {
-        let element = P::parse(&self.source)?;
+        let element = P::parse(self.source.as_bytes())?;
         let element = element.into_config_element()?;
 
         let desc = ConfigSourceDescription::Custom("String".to_string());
