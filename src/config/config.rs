@@ -39,7 +39,7 @@ impl Config {
     /// # Examples
     ///
     /// ```no_run
-    /// # use crate::config::Config;
+    /// # use config_rs_ng::Config;
     /// let config: Config = { //...
     /// # unimplemented!()
     /// };
