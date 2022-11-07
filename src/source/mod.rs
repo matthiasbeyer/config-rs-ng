@@ -1,8 +1,10 @@
 use crate::object::ConfigObject;
 
+mod file;
 mod format;
 mod string;
 
+pub use crate::source::file::FileSource;
 pub use crate::source::format::FormatParser;
 pub use crate::source::format::JsonFormatParser;
 pub use crate::source::string::StringSource;
