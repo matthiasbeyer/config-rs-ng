@@ -15,8 +15,3 @@ pub enum ConfigError {
     #[error("Configuration is not loaded")]
     NotLoaded,
 }
-
-#[derive(Debug, thiserror::Error)]
-pub enum ConfigBuilderError<E> {
-    Wrapped(E),
-}
