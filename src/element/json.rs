@@ -29,7 +29,7 @@ impl IntoConfigElement for serde_json::Value {
                 .into_iter()
                 .map(|(k, v)| v.into_config_element().map(|v| (k.to_string(), v)))
                 .collect::<Result<HashMap<String, ConfigElement>, JsonIntoConfigElementError>>()
-                .map(|map| ConfigElement::Map(map)),
+                .map(ConfigElement::Map),
         }
     }
 }

@@ -1,4 +1,5 @@
 mod builder;
+#[allow(clippy::module_inception)]
 mod config;
 mod error;
 

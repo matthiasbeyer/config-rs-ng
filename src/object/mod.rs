@@ -5,6 +5,7 @@ use crate::element::ConfigElement;
 #[derive(Clone, Debug)]
 pub struct ConfigObject {
     element: ConfigElement,
+    #[allow(unused)] // TODO
     source: ConfigSourceDescription,
 }
 

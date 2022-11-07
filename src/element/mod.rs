@@ -77,7 +77,7 @@ impl ConfigElement {
                 if let Some(value) = hm.get(k.as_str()) {
                     accessor.advance();
                     if accessor.current().is_none() {
-                        return Ok(Some(value));
+                        Ok(Some(value))
                     } else {
                         value.get(accessor)
                     }
@@ -129,7 +129,7 @@ impl ConfigElement {
                 if let Some(value) = v.get(*u) {
                     accessor.advance();
                     if accessor.current().is_none() {
-                        return Ok(Some(value));
+                        Ok(Some(value))
                     } else {
                         value.get(accessor)
                     }

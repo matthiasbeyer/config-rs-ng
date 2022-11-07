@@ -5,8 +5,8 @@ mod element;
 mod object;
 mod source;
 
-pub use crate::accessor::Accessor;
 pub use crate::accessor::AccessType;
+pub use crate::accessor::Accessor;
 pub use crate::accessor::ParsableAccessor;
 pub use crate::config::Config;
 pub use crate::config::ConfigBuilder;
