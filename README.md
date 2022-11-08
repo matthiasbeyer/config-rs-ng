@@ -11,6 +11,8 @@ This code is not released on crates.io!
 The long-term goal of this repository is to be merged into the `config-rs`
 codebase, because it aims to be the "next generation" of config-rs.
 
+For a more detailed vision, see the [VISION](./VISION.md) document.
+
 ## License
 
 (c) Matthias Beyer
