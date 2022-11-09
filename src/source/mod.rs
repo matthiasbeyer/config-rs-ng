@@ -1,9 +1,13 @@
 use crate::object::ConfigObject;
 
+#[cfg(feature = "async")]
+mod async_source;
 mod file;
 mod format;
 mod string;
 
+#[cfg(feature = "async")]
+pub use crate::source::async_source::AsyncConfigSource;
 pub use crate::source::file::FileSource;
 pub use crate::source::format::FormatParser;
 pub use crate::source::format::JsonFormatParser;

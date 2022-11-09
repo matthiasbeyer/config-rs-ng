@@ -15,6 +15,11 @@ impl Config {
         ConfigBuilder::new()
     }
 
+    #[cfg(feature = "async")]
+    pub fn async_builder() -> crate::config::AsyncConfigBuilder {
+        crate::config::AsyncConfigBuilder::new()
+    }
+
     pub(super) fn build_from_builder(builder: &ConfigBuilder) -> Result<Self, ConfigError> {
         let config = Config {
             layers: builder.reload()?,
