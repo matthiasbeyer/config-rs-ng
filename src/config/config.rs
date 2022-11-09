@@ -63,7 +63,7 @@ impl Config {
         &self,
         mut accessor: Accessor,
     ) -> Result<Option<&ConfigElement>, ConfigError> {
-        for layer in self.layers.iter() {
+        for layer in self.layers.iter().rev() {
             if let Some(value) = layer.get(&mut accessor)? {
                 return Ok(Some(value));
             }
