@@ -144,6 +144,154 @@ impl ConfigElement {
             (None, _) => Err(ConfigObjectAccessError::NoAccessor),
         }
     }
+
+    pub fn is_null(&self) -> bool {
+        std::matches!(self, ConfigElement::Null)
+    }
+
+    pub fn is_bool(&self) -> bool {
+        std::matches!(self, ConfigElement::Bool(_))
+    }
+
+    pub fn is_i8(&self) -> bool {
+        std::matches!(self, ConfigElement::I8(_))
+    }
+
+    pub fn is_i16(&self) -> bool {
+        std::matches!(self, ConfigElement::I16(_))
+    }
+
+    pub fn is_i32(&self) -> bool {
+        std::matches!(self, ConfigElement::I32(_))
+    }
+
+    pub fn is_i64(&self) -> bool {
+        std::matches!(self, ConfigElement::I64(_))
+    }
+
+    pub fn is_u8(&self) -> bool {
+        std::matches!(self, ConfigElement::U8(_))
+    }
+
+    pub fn is_u16(&self) -> bool {
+        std::matches!(self, ConfigElement::U16(_))
+    }
+
+    pub fn is_u32(&self) -> bool {
+        std::matches!(self, ConfigElement::U32(_))
+    }
+
+    pub fn is_u64(&self) -> bool {
+        std::matches!(self, ConfigElement::U64(_))
+    }
+
+    pub fn is_str(&self) -> bool {
+        std::matches!(self, ConfigElement::Str(_))
+    }
+
+    pub fn is_list(&self) -> bool {
+        std::matches!(self, ConfigElement::List(_))
+    }
+
+    pub fn is_map(&self) -> bool {
+        std::matches!(self, ConfigElement::Map(_))
+    }
+
+    pub fn as_bool(&self) -> Option<bool> {
+        if let ConfigElement::Bool(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_i8(&self) -> Option<i8> {
+        if let ConfigElement::I8(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_i16(&self) -> Option<i16> {
+        if let ConfigElement::I16(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_i32(&self) -> Option<i32> {
+        if let ConfigElement::I32(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_i64(&self) -> Option<i64> {
+        if let ConfigElement::I64(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_u8(&self) -> Option<u8> {
+        if let ConfigElement::U8(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_u16(&self) -> Option<u16> {
+        if let ConfigElement::U16(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_u32(&self) -> Option<u32> {
+        if let ConfigElement::U32(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_u64(&self) -> Option<u64> {
+        if let ConfigElement::U64(o) = self {
+            Some(*o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_str(&self) -> Option<&str> {
+        if let ConfigElement::Str(ref o) = self {
+            Some(o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_list(&self) -> Option<&[ConfigElement]> {
+        if let ConfigElement::List(ref o) = self {
+            Some(o)
+        } else {
+            None
+        }
+    }
+
+    pub fn as_map(&self) -> Option<&HashMap<String, ConfigElement>> {
+        if let ConfigElement::Map(ref o) = self {
+            Some(o)
+        } else {
+            None
+        }
+    }
 }
 
 pub trait IntoConfigElement {
