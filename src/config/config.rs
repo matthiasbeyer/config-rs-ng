@@ -28,6 +28,17 @@ impl Config {
         Ok(config)
     }
 
+    #[cfg(feature = "async")]
+    pub(super) async fn build_from_async_builder(
+        builder: &crate::config::AsyncConfigBuilder,
+    ) -> Result<Self, ConfigError> {
+        let config = Config {
+            layers: builder.reload().await?,
+        };
+
+        Ok(config)
+    }
+
     /// Access the configuration at a specific position
     ///
     /// Use an object of a type implementing the `ParsableAccessor` trait for accessing the
