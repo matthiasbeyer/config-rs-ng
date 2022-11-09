@@ -33,3 +33,6 @@ default = ["async", "json", "toml"]
 json = ["serde_json"]
 toml = ["dep:toml"]
 async = ["async-trait", "futures", "itertools", "tokio"]
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
