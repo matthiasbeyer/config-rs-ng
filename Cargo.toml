@@ -26,9 +26,13 @@ itertools = { version = "0.10", optional = true }
 futures = { version = "0.3", optional = true }
 serde_json = { version = "1.0.2", optional = true }
 toml = { version = "0.5", optional = true }
+tokio = { version = "1", optional = true, features = ["fs"] }
 
 [features]
-default = ["json", "toml"]
+default = ["async", "json", "toml"]
 json = ["serde_json"]
 toml = ["dep:toml"]
-async = ["async-trait", "futures", "itertools"]
+async = ["async-trait", "futures", "itertools", "tokio"]
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }

@@ -35,6 +35,22 @@ where
     }
 }
 
+#[cfg(feature = "async")]
+#[async_trait::async_trait]
+impl<P> crate::source::AsyncConfigSource for StringSource<P>
+where
+    P: FormatParser + std::marker::Sync + std::fmt::Debug,
+    SourceError: From<<<P as FormatParser>::Output as IntoConfigElement>::Error>,
+{
+    async fn load_async(&self) -> Result<ConfigObject, SourceError> {
+        let element = P::parse(self.source.as_bytes())?;
+        let element = element.into_config_element()?;
+
+        let desc = ConfigSourceDescription::Custom("String".to_string());
+        Ok(ConfigObject::new(element, desc))
+    }
+}
+
 #[cfg(test)]
 mod test_source_impl {
     #[cfg(feature = "json")]
