@@ -42,3 +42,20 @@ where
         Ok(ConfigObject::new(element, desc))
     }
 }
+
+#[cfg(feature = "async")]
+#[async_trait::async_trait]
+impl<P> crate::source::AsyncConfigSource for FileSource<P>
+where
+    P: FormatParser + Send + Sync + Debug,
+    SourceError: From<<<P as FormatParser>::Output as IntoConfigElement>::Error>,
+{
+    async fn load_async(&self) -> Result<ConfigObject, SourceError> {
+        let buf = tokio::fs::read(&self.path).await?;
+        let element = P::parse(&buf)?;
+        let element = element.into_config_element()?;
+
+        let desc = ConfigSourceDescription::Custom("String".to_string());
+        Ok(ConfigObject::new(element, desc))
+    }
+}
