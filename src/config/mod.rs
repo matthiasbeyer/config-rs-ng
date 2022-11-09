@@ -98,7 +98,7 @@ mod tests {
         assert!(r.is_some());
         let r = r.unwrap();
         match r {
-            ConfigElement::Str(s) => assert_eq!(s, "value1"),
+            ConfigElement::Str(s) => assert_eq!(s, "value2"),
             _ => panic!(),
         }
 
@@ -146,7 +146,7 @@ mod tests {
         assert!(r.is_some());
         let r = r.unwrap();
         match r {
-            ConfigElement::Str(s) => assert_eq!(s, "value1"),
+            ConfigElement::Str(s) => assert_eq!(s, "value2"),
             _ => panic!(),
         }
 
