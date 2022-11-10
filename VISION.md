@@ -143,6 +143,8 @@ The config-rs-ng crate aims for the following users:
     file location helpers (via crates like [xdg] or [directories]), but always
     hidden behind compiletime feature flags that can be used to disable this
     functionality if desired.
+* Configuration errors MUST point to the source of the error, that is, the
+  source the error came from
 
 ## Soft Requirements
 
