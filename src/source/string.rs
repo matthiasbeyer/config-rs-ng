@@ -1,5 +1,4 @@
 use crate::description::ConfigSourceDescription;
-use crate::element::IntoConfigElement;
 use crate::object::ConfigObject;
 use crate::source::format::FormatParser;
 use crate::ConfigSource;
@@ -24,14 +23,13 @@ impl<P: FormatParser> StringSource<P> {
 impl<P> ConfigSource for StringSource<P>
 where
     P: FormatParser + std::fmt::Debug,
-    SourceError: From<<<P as FormatParser>::Output as IntoConfigElement>::Error>,
+    <P as FormatParser>::Output: 'static,
 {
     fn load(&self) -> Result<ConfigObject, SourceError> {
-        let element = P::parse(self.source.as_bytes())?;
-        let element = element.into_config_element()?;
+        let element = P::parse(self.source.as_bytes().to_vec())?;
 
         let desc = ConfigSourceDescription::Custom("String".to_string());
-        Ok(ConfigObject::new(element, desc))
+        Ok(ConfigObject::new(Box::new(element), desc))
     }
 }
 
@@ -40,14 +38,13 @@ where
 impl<P> crate::source::AsyncConfigSource for StringSource<P>
 where
     P: FormatParser + std::marker::Sync + std::fmt::Debug,
-    SourceError: From<<<P as FormatParser>::Output as IntoConfigElement>::Error>,
+    <P as FormatParser>::Output: 'static,
 {
     async fn load_async(&self) -> Result<ConfigObject, SourceError> {
-        let element = P::parse(self.source.as_bytes())?;
-        let element = element.into_config_element()?;
+        let element = P::parse(self.source.as_bytes().to_vec())?;
 
         let desc = ConfigSourceDescription::Custom("String".to_string());
-        Ok(ConfigObject::new(element, desc))
+        Ok(ConfigObject::new(Box::new(element), desc))
     }
 }
 

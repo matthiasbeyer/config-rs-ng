@@ -3,7 +3,6 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use crate::description::ConfigSourceDescription;
-use crate::element::IntoConfigElement;
 use crate::object::ConfigObject;
 use crate::source::format::FormatParser;
 use crate::ConfigSource;
@@ -31,15 +30,14 @@ impl<P: FormatParser> FileSource<P> {
 impl<P> ConfigSource for FileSource<P>
 where
     P: FormatParser + Debug,
-    SourceError: From<<<P as FormatParser>::Output as IntoConfigElement>::Error>,
+    <P as FormatParser>::Output: 'static,
 {
     fn load(&self) -> Result<ConfigObject, SourceError> {
         let buf = std::fs::read(&self.path)?;
-        let element = P::parse(&buf)?;
-        let element = element.into_config_element()?;
+        let element = P::parse(buf)?;
 
         let desc = ConfigSourceDescription::Custom("String".to_string());
-        Ok(ConfigObject::new(element, desc))
+        Ok(ConfigObject::new(Box::new(element), desc))
     }
 }
 
@@ -48,14 +46,13 @@ where
 impl<P> crate::source::AsyncConfigSource for FileSource<P>
 where
     P: FormatParser + Send + Sync + Debug,
-    SourceError: From<<<P as FormatParser>::Output as IntoConfigElement>::Error>,
+    <P as FormatParser>::Output: 'static,
 {
     async fn load_async(&self) -> Result<ConfigObject, SourceError> {
         let buf = tokio::fs::read(&self.path).await?;
-        let element = P::parse(&buf)?;
-        let element = element.into_config_element()?;
+        let element = P::parse(buf)?;
 
         let desc = ConfigSourceDescription::Custom("String".to_string());
-        Ok(ConfigObject::new(element, desc))
+        Ok(ConfigObject::new(Box::new(element), desc))
     }
 }

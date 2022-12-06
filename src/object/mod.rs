@@ -2,23 +2,30 @@ use crate::accessor::Accessor;
 use crate::description::ConfigSourceDescription;
 use crate::element::ConfigElement;
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct ConfigObject {
-    element: ConfigElement,
+    element: Box<dyn ConfigElement>,
     #[allow(unused)] // TODO
     source: ConfigSourceDescription,
 }
 
 impl ConfigObject {
-    pub(crate) fn new(element: ConfigElement, source: ConfigSourceDescription) -> Self {
+    pub(crate) fn new(element: Box<dyn ConfigElement>, source: ConfigSourceDescription) -> Self {
         Self { element, source }
     }
 
     pub(crate) fn get(
         &self,
         accessor: &mut Accessor,
-    ) -> Result<Option<&ConfigElement>, ConfigObjectAccessError> {
-        self.element.get(accessor)
+    ) -> Result<Option<&dyn ConfigElement>, ConfigObjectAccessError> {
+        self.element.access(accessor)
+    }
+
+    pub(crate) fn get_as<T: ConfigElement>(
+        &self,
+        accessor: &mut Accessor,
+    ) -> Result<Option<&T>, ConfigObjectAccessError> {
+        Ok(self.get(accessor)?.and_then(|t| t.downcast_ref()))
     }
 }
 

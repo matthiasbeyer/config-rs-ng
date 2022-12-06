@@ -26,17 +26,9 @@ pub enum SourceError {
     #[error("JSON Parser error")]
     JsonParserError(#[from] serde_json::Error),
 
-    #[cfg(feature = "json")]
-    #[error("JSON load error")]
-    JsonLoadError(#[from] crate::element::json::JsonIntoConfigElementError),
-
     #[cfg(feature = "toml")]
     #[error("TOML Parser error")]
     TomlParserError(#[from] toml::de::Error),
-
-    #[cfg(feature = "toml")]
-    #[error("TOML load error")]
-    TomlLoadError(#[from] crate::element::toml::TomlIntoConfigElementError),
 }
 
 #[cfg(test)]
@@ -49,12 +41,15 @@ pub(crate) mod test_source {
     use super::SourceError;
 
     #[derive(Debug)]
-    pub(crate) struct TestSource(pub(crate) ConfigElement);
+    pub(crate) struct TestSource<T: ConfigElement + Clone>(pub(crate) T);
 
-    impl ConfigSource for TestSource {
+    impl<T> ConfigSource for TestSource<T>
+    where
+        T: ConfigElement + Clone,
+    {
         fn load(&self) -> Result<ConfigObject, SourceError> {
             Ok(ConfigObject::new(
-                self.0.clone(),
+                Box::new(self.0.clone()),
                 ConfigSourceDescription::Unknown,
             ))
         }
