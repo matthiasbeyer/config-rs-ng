@@ -116,6 +116,14 @@ The config-rs-ng crate aims for the following users:
   * The crate MUST support loading configuration data sources in an synchronous
     way as well as in an asynchronous way. The developer MUST be able to switch
     loading mechanisms without having to rewrite their configuration types
+* Data Formats
+  * The crate MUST be format agnostic. That means that the crate does not
+    enforce a certain format, or even limit the developer in the format that
+    they can use.
+    Former implementations limited the format to a JSONesque format, where only
+    atoms, lists and maps were supported. It is an explicit goal to lift that
+    restriction.
+  * The underlying data format MUST be able to expose span information.
 * The crate MUST allow deserializing the loaded configuration objects to a type
   that implements `serde::Deserialize` although layering-information and context
   is lost this way
