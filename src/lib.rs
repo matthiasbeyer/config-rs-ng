@@ -16,6 +16,7 @@ pub use crate::object::ConfigObject;
 pub use crate::source::ConfigSource;
 pub use crate::source::FileSource;
 pub use crate::source::FormatParser;
+pub use crate::source::SourceError;
 pub use crate::source::StringSource;
 
 #[cfg(feature = "json")]
