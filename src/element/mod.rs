@@ -117,54 +117,107 @@ pub trait ConfigElement: std::fmt::Debug + downcast_rs::DowncastSync {
         self.as_map().is_some()
     }
 
+    /// Internal helper function
+    ///
+    /// Is automatically implemented using the ConfigElement::is_* functions
+    fn get_type(&self) -> ConfigElementType {
+        if self.is_null() {
+            return ConfigElementType::Null;
+        }
+        if self.is_bool() {
+            return ConfigElementType::Bool;
+        }
+        if self.is_i8() {
+            return ConfigElementType::I8;
+        }
+        if self.is_i16() {
+            return ConfigElementType::I16;
+        }
+        if self.is_i32() {
+            return ConfigElementType::I32;
+        }
+        if self.is_i64() {
+            return ConfigElementType::I64;
+        }
+        if self.is_u8() {
+            return ConfigElementType::U8;
+        }
+        if self.is_u16() {
+            return ConfigElementType::U16;
+        }
+        if self.is_u32() {
+            return ConfigElementType::U32;
+        }
+        if self.is_u64() {
+            return ConfigElementType::U64;
+        }
+        if self.is_f32() {
+            return ConfigElementType::F32;
+        }
+        if self.is_f64() {
+            return ConfigElementType::F64;
+        }
+        if self.is_str() {
+            return ConfigElementType::Str;
+        }
+        if self.is_list() {
+            return ConfigElementType::List;
+        }
+        if self.is_map() {
+            return ConfigElementType::Map;
+        }
+
+        unreachable!()
+    }
+
     fn access(
         &self,
         accessor: &mut Accessor,
     ) -> Result<Option<&dyn ConfigElement>, ConfigObjectAccessError> {
-        match accessor.current() {
-            Some(AccessType::Key(k)) if self.is_null() => {
+        match (accessor.current(), self.get_type()) {
+            (Some(AccessType::Key(k)), ConfigElementType::Null) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnNull(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_bool() => {
+            (Some(AccessType::Key(k)), ConfigElementType::Bool) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnBool(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_i8() => {
+            (Some(AccessType::Key(k)), ConfigElementType::I8) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnI8(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_i16() => {
+            (Some(AccessType::Key(k)), ConfigElementType::I16) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnI16(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_i32() => {
+            (Some(AccessType::Key(k)), ConfigElementType::I32) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnI32(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_i64() => {
+            (Some(AccessType::Key(k)), ConfigElementType::I64) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnI64(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_u8() => {
+            (Some(AccessType::Key(k)), ConfigElementType::U8) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnU8(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_u16() => {
+            (Some(AccessType::Key(k)), ConfigElementType::U16) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnU16(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_u32() => {
+            (Some(AccessType::Key(k)), ConfigElementType::U32) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnU32(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_u64() => {
+            (Some(AccessType::Key(k)), ConfigElementType::U64) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnU64(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_f32() => {
+            (Some(AccessType::Key(k)), ConfigElementType::F32) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnF32(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_f64() => {
+            (Some(AccessType::Key(k)), ConfigElementType::F64) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnF64(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_str() => {
+            (Some(AccessType::Key(k)), ConfigElementType::Str) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnStr(k.to_string()))
             }
-            Some(AccessType::Key(k)) if self.is_list() => {
+            (Some(AccessType::Key(k)), ConfigElementType::List) => {
                 Err(ConfigObjectAccessError::AccessWithKeyOnList(k.to_string()))
             }
-            Some(AccessType::Key(k)) => {
+            (Some(AccessType::Key(k)), ConfigElementType::Map) => {
                 if let Some(hm) = self.as_map() {
                     if let Some(value) = hm.get(k.as_str()) {
                         accessor.advance();
@@ -181,49 +234,49 @@ pub trait ConfigElement: std::fmt::Debug + downcast_rs::DowncastSync {
                 }
             }
 
-            Some(AccessType::Index(u)) if self.is_null() => {
+            (Some(AccessType::Index(u)), ConfigElementType::Null) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnNull(*u))
             }
-            Some(AccessType::Index(u)) if self.is_bool() => {
+            (Some(AccessType::Index(u)), ConfigElementType::Bool) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnBool(*u))
             }
-            Some(AccessType::Index(u)) if self.is_i8() => {
+            (Some(AccessType::Index(u)), ConfigElementType::I8) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnI8(*u))
             }
-            Some(AccessType::Index(u)) if self.is_i16() => {
+            (Some(AccessType::Index(u)), ConfigElementType::I16) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnI16(*u))
             }
-            Some(AccessType::Index(u)) if self.is_i32() => {
+            (Some(AccessType::Index(u)), ConfigElementType::I32) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnI32(*u))
             }
-            Some(AccessType::Index(u)) if self.is_i64() => {
+            (Some(AccessType::Index(u)), ConfigElementType::I64) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnI64(*u))
             }
-            Some(AccessType::Index(u)) if self.is_u8() => {
+            (Some(AccessType::Index(u)), ConfigElementType::U8) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnU8(*u))
             }
-            Some(AccessType::Index(u)) if self.is_u16() => {
+            (Some(AccessType::Index(u)), ConfigElementType::U16) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnU16(*u))
             }
-            Some(AccessType::Index(u)) if self.is_u32() => {
+            (Some(AccessType::Index(u)), ConfigElementType::U32) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnU32(*u))
             }
-            Some(AccessType::Index(u)) if self.is_u64() => {
+            (Some(AccessType::Index(u)), ConfigElementType::U64) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnU64(*u))
             }
-            Some(AccessType::Index(u)) if self.is_f32() => {
+            (Some(AccessType::Index(u)), ConfigElementType::F32) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnF32(*u))
             }
-            Some(AccessType::Index(u)) if self.is_f64() => {
+            (Some(AccessType::Index(u)), ConfigElementType::F64) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnF64(*u))
             }
-            Some(AccessType::Index(u)) if self.is_str() => {
+            (Some(AccessType::Index(u)), ConfigElementType::Str) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnStr(*u))
             }
-            Some(AccessType::Index(u)) if self.is_map() => {
+            (Some(AccessType::Index(u)), ConfigElementType::Map) => {
                 Err(ConfigObjectAccessError::AccessWithIndexOnMap(*u))
             }
-            Some(AccessType::Index(u)) => {
+            (Some(AccessType::Index(u)), ConfigElementType::List) => {
                 if let Some(list) = self.as_list() {
                     if let Some(value) = list.at_index(*u) {
                         accessor.advance();
@@ -240,9 +293,27 @@ pub trait ConfigElement: std::fmt::Debug + downcast_rs::DowncastSync {
                 }
             }
 
-            None => Err(ConfigObjectAccessError::NoAccessor),
+            (None, _) => Err(ConfigObjectAccessError::NoAccessor),
         }
     }
+}
+
+pub enum ConfigElementType {
+    Null,
+    Bool,
+    I8,
+    I16,
+    I32,
+    I64,
+    U8,
+    U16,
+    U32,
+    U64,
+    F32,
+    F64,
+    Str,
+    List,
+    Map,
 }
 
 downcast_rs::impl_downcast!(sync ConfigElement);
