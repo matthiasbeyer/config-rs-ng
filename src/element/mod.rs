@@ -9,6 +9,13 @@ pub trait ConfigElementListType {
     // This function strangely has to be named something else than `get` because we cannot use
     // `Vec::get` in the impl for Vec<T> otherwise.
     fn at_index(&self, index: usize) -> Option<&dyn ConfigElement>;
+
+    /// Check whether the list object is empty
+    ///
+    /// Auto-implemented using Self::len().
+    fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
 }
 
 impl<T> ConfigElementListType for Vec<T>
