@@ -10,7 +10,7 @@ pub struct ConfigObject {
 }
 
 impl ConfigObject {
-    pub(crate) fn new(element: Box<dyn ConfigElement>, source: ConfigSourceDescription) -> Self {
+    pub fn new(element: Box<dyn ConfigElement>, source: ConfigSourceDescription) -> Self {
         Self { element, source }
     }
 
