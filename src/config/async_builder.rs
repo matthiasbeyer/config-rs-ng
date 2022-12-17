@@ -7,6 +7,7 @@ use crate::{
 
 use super::ConfigError;
 
+#[derive(Debug)]
 pub struct AsyncConfigBuilder {
     layers_builders: Vec<Box<dyn crate::source::AsyncConfigSource>>,
     defaults_builders: Vec<Box<dyn crate::source::AsyncConfigSource>>,
@@ -37,7 +38,7 @@ impl AsyncConfigBuilder {
         self
     }
 
-    pub async fn build(&self) -> Result<Config, ConfigError> {
+    pub async fn build(self) -> Result<Config, ConfigError> {
         Config::build_from_async_builder(self).await
     }
 

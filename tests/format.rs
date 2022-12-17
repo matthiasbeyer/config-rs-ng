@@ -1,3 +1,4 @@
+#![cfg(not(feature = "async"))]
 use config_rs_ng::Config;
 use config_rs_ng::ConfigElement;
 use config_rs_ng::ConfigElementListType;

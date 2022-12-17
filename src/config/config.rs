@@ -1,6 +1,9 @@
 use crate::accessor::Accessor;
 use crate::accessor::ParsableAccessor;
+
+#[cfg(not(feature = "async"))]
 use crate::config::ConfigBuilder;
+
 use crate::config::ConfigError;
 use crate::element::ConfigElement;
 use crate::object::ConfigObject;
@@ -8,10 +11,17 @@ use crate::object::ConfigView;
 
 #[derive(Debug)]
 pub struct Config {
+    #[cfg(not(feature = "async"))]
+    builder: ConfigBuilder,
+
+    #[cfg(feature = "async")]
+    builder: super::AsyncConfigBuilder,
+
     layers: Vec<ConfigObject>,
 }
 
 impl Config {
+    #[cfg(not(feature = "async"))]
     pub fn builder() -> ConfigBuilder {
         ConfigBuilder::new()
     }
@@ -21,9 +31,11 @@ impl Config {
         crate::config::AsyncConfigBuilder::new()
     }
 
-    pub(super) fn build_from_builder(builder: &ConfigBuilder) -> Result<Self, ConfigError> {
+    #[cfg(not(feature = "async"))]
+    pub(super) fn build_from_builder(builder: ConfigBuilder) -> Result<Self, ConfigError> {
         let config = Config {
             layers: builder.reload()?,
+            builder,
         };
 
         Ok(config)
@@ -31,10 +43,11 @@ impl Config {
 
     #[cfg(feature = "async")]
     pub(super) async fn build_from_async_builder(
-        builder: &crate::config::AsyncConfigBuilder,
+        builder: crate::config::AsyncConfigBuilder,
     ) -> Result<Self, ConfigError> {
         let config = Config {
             layers: builder.reload().await?,
+            builder,
         };
 
         Ok(config)
@@ -138,5 +151,19 @@ impl Config {
         }
 
         Ok(None)
+    }
+
+    #[cfg(not(feature = "async"))]
+    pub fn reload(&mut self) -> Result<(), ConfigError> {
+        let layers = self.builder.reload()?;
+        self.layers = layers;
+        Ok(())
+    }
+
+    #[cfg(feature = "async")]
+    pub async fn reload(&mut self) -> Result<(), ConfigError> {
+        let layers = self.builder.reload().await?;
+        self.layers = layers;
+        Ok(())
     }
 }

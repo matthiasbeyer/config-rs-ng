@@ -1,3 +1,4 @@
+#![cfg(not(feature = "async"))]
 use std::sync::Mutex;
 
 use config_rs_ng::Config;
