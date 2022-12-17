@@ -32,7 +32,7 @@ impl ConfigObject {
         &'a self,
         accessor: &mut Accessor,
     ) -> Result<Option<ConfigView<'a>>, ConfigObjectAccessError> {
-        if let Some(element) = self.get(accessor)?.map(Box::new) {
+        if let Some(element) = self.get(accessor)? {
             Ok(Some({
                 ConfigView {
                     element,
@@ -113,13 +113,13 @@ pub enum ConfigObjectAccessError {
 /// that value.
 #[derive(Debug)]
 pub struct ConfigView<'a> {
-    element: Box<&'a dyn ConfigElement>,
+    element: &'a dyn ConfigElement,
     desc: &'a ConfigSourceDescription,
 }
 
 impl<'a> ConfigView<'a> {
     pub fn value(&self) -> &dyn ConfigElement {
-        &**self.element
+        self.element
     }
 
     pub fn description(&self) -> &ConfigSourceDescription {
