@@ -14,14 +14,12 @@ pub use crate::config::error::*;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::element::ConfigElement;
-    use crate::element::IntoConfigElement;
 
     #[test]
     fn test_compile_loading() {
         let _c = Config::builder()
             .load(Box::new(crate::source::test_source::TestSource(
-                ConfigElement::Null,
+                toml::Value::String("".to_string()),
             )))
             .build()
             .unwrap();
@@ -38,9 +36,7 @@ mod tests {
         .unwrap();
 
         let _c = Config::builder()
-            .load(Box::new(crate::source::test_source::TestSource(
-                json.into_config_element().unwrap(),
-            )))
+            .load(Box::new(crate::source::test_source::TestSource(json)))
             .build()
             .unwrap();
     }
@@ -55,7 +51,7 @@ mod tests {
         )
         .unwrap();
 
-        let source = crate::source::test_source::TestSource(json.into_config_element().unwrap());
+        let source = crate::source::test_source::TestSource(json);
 
         let c = Config::builder().load(Box::new(source)).build().unwrap();
 
@@ -64,10 +60,8 @@ mod tests {
         let r = r.unwrap();
         assert!(r.is_some());
         let r = r.unwrap();
-        match r {
-            ConfigElement::Str(s) => assert_eq!(s, "value"),
-            _ => panic!(),
-        }
+        assert!(r.is_str());
+        assert_eq!(r.as_str().unwrap(), "value");
     }
 
     #[test]
@@ -87,8 +81,8 @@ mod tests {
         )
         .unwrap();
 
-        let source1 = crate::source::test_source::TestSource(json1.into_config_element().unwrap());
-        let source2 = crate::source::test_source::TestSource(json2.into_config_element().unwrap());
+        let source1 = crate::source::test_source::TestSource(json1);
+        let source2 = crate::source::test_source::TestSource(json2);
 
         let c = Config::builder()
             .load(Box::new(source1))
@@ -101,20 +95,16 @@ mod tests {
         let r = r.unwrap();
         assert!(r.is_some());
         let r = r.unwrap();
-        match r {
-            ConfigElement::Str(s) => assert_eq!(s, "value2"),
-            _ => panic!(),
-        }
+        assert!(r.is_str());
+        assert_eq!(r.as_str().unwrap(), "value2");
 
         let r = c.get("key2");
         assert!(r.is_ok());
         let r = r.unwrap();
         assert!(r.is_some());
         let r = r.unwrap();
-        match r {
-            ConfigElement::Str(s) => assert_eq!(s, "value3"),
-            _ => panic!(),
-        }
+        assert!(r.is_str());
+        assert_eq!(r.as_str().unwrap(), "value3");
     }
 
     #[test]
@@ -135,8 +125,8 @@ mod tests {
         )
         .unwrap();
 
-        let source1 = crate::source::test_source::TestSource(json.into_config_element().unwrap());
-        let source2 = crate::source::test_source::TestSource(toml.into_config_element().unwrap());
+        let source1 = crate::source::test_source::TestSource(json);
+        let source2 = crate::source::test_source::TestSource(toml);
 
         let c = Config::builder()
             .load(Box::new(source1))
@@ -149,19 +139,15 @@ mod tests {
         let r = r.unwrap();
         assert!(r.is_some());
         let r = r.unwrap();
-        match r {
-            ConfigElement::Str(s) => assert_eq!(s, "value2"),
-            _ => panic!(),
-        }
+        assert!(r.is_str());
+        assert_eq!(r.as_str().unwrap(), "value2");
 
         let r = c.get("key2");
         assert!(r.is_ok());
         let r = r.unwrap();
         assert!(r.is_some());
         let r = r.unwrap();
-        match r {
-            ConfigElement::Str(s) => assert_eq!(s, "value3"),
-            _ => panic!(),
-        }
+        assert!(r.is_str());
+        assert_eq!(r.as_str().unwrap(), "value3");
     }
 }

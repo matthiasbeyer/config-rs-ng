@@ -27,6 +27,8 @@ futures = { version = "0.3", optional = true }
 serde_json = { version = "1.0.2", optional = true }
 toml = { version = "0.5", optional = true }
 tokio = { version = "1", optional = true, features = ["fs"] }
+static_assertions = "1.1.0"
+downcast-rs = "1.2.0"
 
 [features]
 default = ["async", "json", "toml"]

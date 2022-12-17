@@ -64,7 +64,7 @@ impl Config {
     ///     // ...
     /// # ;
     /// ```
-    pub fn get<A>(&self, accessor: A) -> Result<Option<&ConfigElement>, ConfigError>
+    pub fn get<A>(&self, accessor: A) -> Result<Option<&dyn ConfigElement>, ConfigError>
     where
         A: ParsableAccessor,
     {
@@ -78,9 +78,31 @@ impl Config {
     pub fn get_with_accessor(
         &self,
         mut accessor: Accessor,
-    ) -> Result<Option<&ConfigElement>, ConfigError> {
+    ) -> Result<Option<&dyn ConfigElement>, ConfigError> {
         for layer in self.layers.iter().rev() {
             if let Some(value) = layer.get(&mut accessor)? {
+                return Ok(Some(value));
+            }
+        }
+
+        Ok(None)
+    }
+
+    pub fn get_as<A, T>(&self, accessor: A) -> Result<Option<&T>, ConfigError>
+    where
+        A: ParsableAccessor,
+        T: ConfigElement,
+    {
+        let accessor = accessor.parse()?;
+        self.get_with_accessor_as::<T>(accessor)
+    }
+
+    pub fn get_with_accessor_as<T>(&self, mut accessor: Accessor) -> Result<Option<&T>, ConfigError>
+    where
+        T: ConfigElement,
+    {
+        for layer in self.layers.iter().rev() {
+            if let Some(value) = layer.get_as::<T>(&mut accessor)? {
                 return Ok(Some(value));
             }
         }

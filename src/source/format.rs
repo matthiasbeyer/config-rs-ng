@@ -1,11 +1,10 @@
-use crate::element::IntoConfigElement;
-
 use super::SourceError;
+use crate::element::ConfigElement;
 
 pub trait FormatParser: std::fmt::Debug {
-    type Output: IntoConfigElement + std::fmt::Debug + Sized;
+    type Output: ConfigElement + std::fmt::Debug + Sized;
 
-    fn parse(buffer: &[u8]) -> Result<Self::Output, SourceError>;
+    fn parse(buffer: Vec<u8>) -> Result<Self::Output, SourceError>;
 }
 
 #[cfg(feature = "json")]
@@ -16,8 +15,8 @@ pub struct JsonFormatParser;
 impl FormatParser for JsonFormatParser {
     type Output = serde_json::Value;
 
-    fn parse(buffer: &[u8]) -> Result<Self::Output, SourceError> {
-        serde_json::from_slice(buffer).map_err(SourceError::JsonParserError)
+    fn parse(buffer: Vec<u8>) -> Result<Self::Output, SourceError> {
+        serde_json::from_slice(&buffer).map_err(SourceError::JsonParserError)
     }
 }
 
@@ -29,7 +28,7 @@ pub struct TomlFormatParser;
 impl FormatParser for TomlFormatParser {
     type Output = toml::Value;
 
-    fn parse(buffer: &[u8]) -> Result<Self::Output, SourceError> {
-        toml::from_slice(buffer).map_err(SourceError::TomlParserError)
+    fn parse(buffer: Vec<u8>) -> Result<Self::Output, SourceError> {
+        toml::from_slice(&buffer).map_err(SourceError::TomlParserError)
     }
 }
