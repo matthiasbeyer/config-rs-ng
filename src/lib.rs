@@ -15,6 +15,7 @@ pub use crate::element::ConfigElement;
 pub use crate::element::ConfigElementListType;
 pub use crate::element::ConfigElementMapType;
 pub use crate::object::ConfigObject;
+pub use crate::object::ConfigView;
 pub use crate::source::ConfigSource;
 pub use crate::source::FileSource;
 pub use crate::source::FormatParser;
