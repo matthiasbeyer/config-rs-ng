@@ -27,6 +27,22 @@ impl ConfigObject {
     ) -> Result<Option<&T>, ConfigObjectAccessError> {
         Ok(self.get(accessor)?.and_then(|t| t.downcast_ref()))
     }
+
+    pub(crate) fn get_with_description<'a>(
+        &'a self,
+        accessor: &mut Accessor,
+    ) -> Result<Option<ConfigView<'a>>, ConfigObjectAccessError> {
+        if let Some(element) = self.get(accessor)? {
+            Ok(Some({
+                ConfigView {
+                    element,
+                    desc: &self.source,
+                }
+            }))
+        } else {
+            Ok(None)
+        }
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -91,4 +107,22 @@ pub enum ConfigObjectAccessError {
     AccessWithIndexOnStr(usize),
     #[error("Accessed Map with index '{0}'")]
     AccessWithIndexOnMap(usize),
+}
+
+/// An object that can be used to get a configuration value or the description of the source of
+/// that value.
+#[derive(Debug)]
+pub struct ConfigView<'a> {
+    element: &'a dyn ConfigElement,
+    desc: &'a ConfigSourceDescription,
+}
+
+impl<'a> ConfigView<'a> {
+    pub fn value(&self) -> &dyn ConfigElement {
+        self.element
+    }
+
+    pub fn description(&self) -> &ConfigSourceDescription {
+        self.desc
+    }
 }

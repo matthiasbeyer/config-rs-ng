@@ -4,6 +4,7 @@ use crate::config::ConfigBuilder;
 use crate::config::ConfigError;
 use crate::element::ConfigElement;
 use crate::object::ConfigObject;
+use crate::object::ConfigView;
 
 #[derive(Debug)]
 pub struct Config {
@@ -72,6 +73,18 @@ impl Config {
         self.get_with_accessor(accessor)
     }
 
+    /// Get a "View" from the configuration
+    ///
+    /// The function works like [`Config::get`], except that it wraps the `&dyn ConfigElement` in a
+    /// `ConfigView` that also contains the description of the source of the configuration value.
+    pub fn get_view<A>(&self, accessor: A) -> Result<Option<ConfigView<'_>>, ConfigError>
+    where
+        A: ParsableAccessor,
+    {
+        let accessor = accessor.parse()?;
+        self.get_view_with_accessor(accessor)
+    }
+
     /// Access the configuration at a specific position
     ///
     /// See [`Config::get`]
@@ -82,6 +95,23 @@ impl Config {
         for layer in self.layers.iter().rev() {
             if let Some(value) = layer.get(&mut accessor)? {
                 return Ok(Some(value));
+            }
+        }
+
+        Ok(None)
+    }
+
+    /// Access the configuration at a specific position, and return the description of the value as
+    /// well
+    ///
+    /// See [`Config::get_view`]
+    pub fn get_view_with_accessor(
+        &self,
+        mut accessor: Accessor,
+    ) -> Result<Option<ConfigView<'_>>, ConfigError> {
+        for layer in self.layers.iter().rev() {
+            if let Some(view) = layer.get_with_description(&mut accessor)? {
+                return Ok(Some(view));
             }
         }
 
