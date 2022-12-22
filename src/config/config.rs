@@ -24,6 +24,7 @@ impl Config {
     }
 
     #[cfg(not(feature = "async"))]
+    #[cfg_attr(feature = "tracing", tracing::instrument)]
     pub(super) fn build_from_builder(builder: ConfigBuilder) -> Result<Self, ConfigError> {
         Ok(Config {
             layers: builder.reload()?,
@@ -32,6 +33,7 @@ impl Config {
     }
 
     #[cfg(feature = "async")]
+    #[cfg_attr(feature = "tracing", tracing::instrument)]
     pub(super) async fn build_from_builder(
         builder: crate::config::AsyncConfigBuilder,
     ) -> Result<Self, ConfigError> {
@@ -142,6 +144,7 @@ impl Config {
     }
 
     #[cfg(not(feature = "async"))]
+    #[cfg_attr(feature = "tracing", tracing::instrument)]
     pub fn reload(&mut self) -> Result<(), ConfigError> {
         let layers = self.builder.reload()?;
         self.layers = layers;
@@ -149,6 +152,7 @@ impl Config {
     }
 
     #[cfg(feature = "async")]
+    #[cfg_attr(feature = "tracing", tracing::instrument)]
     pub async fn reload(&mut self) -> Result<(), ConfigError> {
         let layers = self.builder.reload().await?;
         self.layers = layers;

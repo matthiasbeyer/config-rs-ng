@@ -36,10 +36,12 @@ impl ConfigBuilder {
         self
     }
 
+    #[cfg_attr(feature = "tracing", tracing::instrument)]
     pub fn build(self) -> Result<Config, ConfigError> {
         Config::build_from_builder(self)
     }
 
+    #[cfg_attr(feature = "tracing", tracing::instrument)]
     pub(crate) fn reload(&self) -> Result<Vec<ConfigObject>, SourceError> {
         self.overwrites_builders
             .iter()
