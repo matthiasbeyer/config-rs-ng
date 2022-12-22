@@ -38,10 +38,12 @@ impl AsyncConfigBuilder {
         self
     }
 
+    #[cfg_attr(feature = "tracing", tracing::instrument)]
     pub async fn build(self) -> Result<Config, ConfigError> {
         Config::build_from_builder(self).await
     }
 
+    #[cfg_attr(feature = "tracing", tracing::instrument)]
     pub(crate) async fn reload(&self) -> Result<Vec<ConfigObject>, SourceError> {
         use futures::StreamExt;
 
@@ -65,6 +67,22 @@ impl AsyncConfigBuilder {
             .map(|cs| cs.load_async())
             .collect::<FuturesUnordered<_>>()
             .collect::<Vec<_>>();
+
+        let (overrides, layers, defaults) = {
+            #[cfg(feature = "tracing")]
+            {
+                use tracing::Instrument;
+                (
+                    overrides.instrument(tracing::debug_span!("Loading overrides")),
+                    layers.instrument(tracing::debug_span!("Loading layers")),
+                    defaults.instrument(tracing::debug_span!("Loading defaults")),
+                )
+            }
+            #[cfg(not(feature = "tracing"))]
+            {
+                (overrides, layers, defaults)
+            }
+        };
 
         let (overrides, layers, defaults) = futures::join!(overrides, layers, defaults);
 
