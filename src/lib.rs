@@ -8,6 +8,8 @@ mod source;
 pub use crate::accessor::AccessType;
 pub use crate::accessor::Accessor;
 pub use crate::accessor::ParsableAccessor;
+#[cfg(feature = "async")]
+pub use crate::config::AsyncConfigBuilder;
 pub use crate::config::Config;
 pub use crate::config::ConfigBuilder;
 pub use crate::description::ConfigSourceDescription;
