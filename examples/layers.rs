@@ -1,22 +1,23 @@
-use config_rs_ng::Config;
-use config_rs_ng::JsonFormatParser;
-use config_rs_ng::StringSource;
+#[cfg(not(feature = "async"))]
+fn run_example() {
+    use config_rs_ng::Config;
+    use config_rs_ng::JsonFormatParser;
+    use config_rs_ng::StringSource;
 
-const CONFIGURATION_LAYER_A: &str = r#"
-{
-    "key1": "valueA",
-    "key2": "valueA"
-}
-"#;
+    const CONFIGURATION_LAYER_A: &str = r#"
+    {
+        "key1": "valueA",
+        "key2": "valueA"
+    }
+    "#;
 
-const CONFIGURATION_LAYER_B: &str = r#"
-{
-    "key2": "valueB",
-    "key3": "valueB"
-}
-"#;
+    const CONFIGURATION_LAYER_B: &str = r#"
+    {
+        "key2": "valueB",
+        "key3": "valueB"
+    }
+    "#;
 
-fn main() {
     let config = Config::builder()
         .load(Box::new({
             StringSource::<JsonFormatParser>::new(CONFIGURATION_LAYER_A.to_string())
@@ -37,4 +38,11 @@ fn main() {
 
         println!("'{}' Config element is: '{:?}'", key, value);
     }
+}
+
+#[cfg(feature = "async")]
+fn run_example() {}
+
+fn main() {
+    run_example()
 }

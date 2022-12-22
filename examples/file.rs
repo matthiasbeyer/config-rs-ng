@@ -1,8 +1,9 @@
-use config_rs_ng::Config;
-use config_rs_ng::FileSource;
-use config_rs_ng::JsonFormatParser;
+#[cfg(not(feature = "async"))]
+fn run_example() {
+    use config_rs_ng::Config;
+    use config_rs_ng::FileSource;
+    use config_rs_ng::JsonFormatParser;
 
-fn main() {
     let config_file = std::env::current_dir()
         .expect("Finding the current directory")
         .join("examples")
@@ -23,4 +24,11 @@ fn main() {
         .expect("Finding 'key' in configuration object");
 
     println!("'key' Config element is: '{:?}'", key);
+}
+
+#[cfg(feature = "async")]
+fn run_example() {}
+
+fn main() {
+    run_example()
 }

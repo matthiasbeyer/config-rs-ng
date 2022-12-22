@@ -36,7 +36,7 @@ impl ConfigBuilder {
         self
     }
 
-    pub fn build(&self) -> Result<Config, ConfigError> {
+    pub fn build(self) -> Result<Config, ConfigError> {
         Config::build_from_builder(self)
     }
 

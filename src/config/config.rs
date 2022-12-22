@@ -1,6 +1,12 @@
 use crate::accessor::Accessor;
 use crate::accessor::ParsableAccessor;
+
+#[cfg(not(feature = "async"))]
 use crate::config::ConfigBuilder;
+
+#[cfg(feature = "async")]
+use crate::config::AsyncConfigBuilder as ConfigBuilder;
+
 use crate::config::ConfigError;
 use crate::element::ConfigElement;
 use crate::object::ConfigObject;
@@ -8,6 +14,7 @@ use crate::object::ConfigView;
 
 #[derive(Debug)]
 pub struct Config {
+    builder: ConfigBuilder,
     layers: Vec<ConfigObject>,
 }
 
@@ -16,28 +23,22 @@ impl Config {
         ConfigBuilder::new()
     }
 
-    #[cfg(feature = "async")]
-    pub fn async_builder() -> crate::config::AsyncConfigBuilder {
-        crate::config::AsyncConfigBuilder::new()
-    }
-
-    pub(super) fn build_from_builder(builder: &ConfigBuilder) -> Result<Self, ConfigError> {
-        let config = Config {
+    #[cfg(not(feature = "async"))]
+    pub(super) fn build_from_builder(builder: ConfigBuilder) -> Result<Self, ConfigError> {
+        Ok(Config {
             layers: builder.reload()?,
-        };
-
-        Ok(config)
+            builder,
+        })
     }
 
     #[cfg(feature = "async")]
-    pub(super) async fn build_from_async_builder(
-        builder: &crate::config::AsyncConfigBuilder,
+    pub(super) async fn build_from_builder(
+        builder: crate::config::AsyncConfigBuilder,
     ) -> Result<Self, ConfigError> {
-        let config = Config {
+        Ok(Config {
             layers: builder.reload().await?,
-        };
-
-        Ok(config)
+            builder,
+        })
     }
 
     /// Access the configuration at a specific position
@@ -138,5 +139,19 @@ impl Config {
         }
 
         Ok(None)
+    }
+
+    #[cfg(not(feature = "async"))]
+    pub fn reload(&mut self) -> Result<(), ConfigError> {
+        let layers = self.builder.reload()?;
+        self.layers = layers;
+        Ok(())
+    }
+
+    #[cfg(feature = "async")]
+    pub async fn reload(&mut self) -> Result<(), ConfigError> {
+        let layers = self.builder.reload().await?;
+        self.layers = layers;
+        Ok(())
     }
 }

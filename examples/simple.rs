@@ -1,14 +1,15 @@
-use config_rs_ng::Config;
-use config_rs_ng::JsonFormatParser;
-use config_rs_ng::StringSource;
+#[cfg(not(feature = "async"))]
+fn run_example() {
+    use config_rs_ng::Config;
+    use config_rs_ng::JsonFormatParser;
+    use config_rs_ng::StringSource;
 
-const CONFIGURATION: &str = r#"
-{
-    "key": "value"
-}
-"#;
+    const CONFIGURATION: &str = r#"
+    {
+        "key": "value"
+    }
+    "#;
 
-fn main() {
     let config = Config::builder()
         .load(Box::new({
             StringSource::<JsonFormatParser>::new(CONFIGURATION.to_string())
@@ -23,4 +24,11 @@ fn main() {
         .expect("Finding 'key' in configuration object");
 
     println!("'key' Config element is: '{:?}'", key);
+}
+
+#[cfg(feature = "async")]
+fn run_example() {}
+
+fn main() {
+    run_example()
 }
