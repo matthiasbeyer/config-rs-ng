@@ -336,7 +336,7 @@ pub mod toml;
 #[cfg(test)]
 mod tests {
     #[test]
-    #[cfg(feature = "toml")]
+    #[cfg(all(feature = "toml", not(feature = "async")))]
     fn test_nested_toml_config() {
         use crate::Config;
 
@@ -372,7 +372,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg(feature = "toml")]
+    #[cfg(all(feature = "toml", not(feature = "async")))]
     fn test_nested_toml_config_with_index() {
         use crate::Config;
 

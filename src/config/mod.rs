@@ -13,7 +13,7 @@ pub use crate::config::builder::*;
 pub use crate::config::config::*;
 pub use crate::config::error::*;
 
-#[cfg(test)]
+#[cfg(all(test, not(feature = "async")))]
 mod tests {
     use super::*;
 
