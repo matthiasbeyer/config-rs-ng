@@ -10,8 +10,9 @@ pub use crate::accessor::Accessor;
 pub use crate::accessor::ParsableAccessor;
 #[cfg(feature = "async")]
 pub use crate::config::AsyncConfigBuilder;
+#[cfg(feature = "async")]
+pub use crate::config::AsyncConfig;
 pub use crate::config::Config;
-#[cfg(not(feature = "async"))]
 pub use crate::config::ConfigBuilder;
 pub use crate::description::ConfigSourceDescription;
 pub use crate::element::ConfigElement;

@@ -1,6 +1,7 @@
 #[cfg(feature = "async")]
 mod async_builder;
-#[cfg(not(feature = "async"))]
+#[cfg(feature = "async")]
+mod async_config;
 mod builder;
 #[allow(clippy::module_inception)]
 mod config;
@@ -8,12 +9,13 @@ mod error;
 
 #[cfg(feature = "async")]
 pub use crate::config::async_builder::*;
-#[cfg(not(feature = "async"))]
+#[cfg(feature = "async")]
+pub use crate::config::async_config::*;
 pub use crate::config::builder::*;
 pub use crate::config::config::*;
 pub use crate::config::error::*;
 
-#[cfg(all(test, not(feature = "async")))]
+#[cfg(test)]
 mod tests {
     use super::*;
 

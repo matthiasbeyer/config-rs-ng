@@ -1,28 +1,28 @@
 use crate::accessor::Accessor;
 use crate::accessor::ParsableAccessor;
-
-use crate::config::ConfigBuilder;
-
+use crate::config::AsyncConfigBuilder;
 use crate::config::ConfigError;
 use crate::element::ConfigElement;
 use crate::object::ConfigObject;
 use crate::object::ConfigView;
 
 #[derive(Debug)]
-pub struct Config {
-    builder: ConfigBuilder,
+pub struct AsyncConfig {
+    builder: AsyncConfigBuilder,
     layers: Vec<ConfigObject>,
 }
 
-impl Config {
-    pub fn builder() -> ConfigBuilder {
-        ConfigBuilder::new()
+impl AsyncConfig {
+    pub fn builder() -> AsyncConfigBuilder {
+        AsyncConfigBuilder::new()
     }
 
     #[cfg_attr(feature = "tracing", tracing::instrument)]
-    pub(super) fn build_from_builder(builder: ConfigBuilder) -> Result<Self, ConfigError> {
-        Ok(Config {
-            layers: builder.reload()?,
+    pub(super) async fn build_from_builder(
+        builder: crate::config::AsyncConfigBuilder,
+    ) -> Result<Self, ConfigError> {
+        Ok(Self {
+            layers: builder.reload().await?,
             builder,
         })
     }
@@ -128,8 +128,8 @@ impl Config {
     }
 
     #[cfg_attr(feature = "tracing", tracing::instrument)]
-    pub fn reload(&mut self) -> Result<(), ConfigError> {
-        let layers = self.builder.reload()?;
+    pub async fn reload(&mut self) -> Result<(), ConfigError> {
+        let layers = self.builder.reload().await?;
         self.layers = layers;
         Ok(())
     }

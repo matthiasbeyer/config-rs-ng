@@ -2,7 +2,7 @@ use futures::stream::FuturesUnordered;
 
 use crate::{
     source::{AsyncConfigSource, SourceError},
-    Config, ConfigObject,
+    AsyncConfig, ConfigObject,
 };
 
 use super::ConfigError;
@@ -39,8 +39,8 @@ impl AsyncConfigBuilder {
     }
 
     #[cfg_attr(feature = "tracing", tracing::instrument)]
-    pub async fn build(self) -> Result<Config, ConfigError> {
-        Config::build_from_builder(self).await
+    pub async fn build(self) -> Result<AsyncConfig, ConfigError> {
+        AsyncConfig::build_from_builder(self).await
     }
 
     #[cfg_attr(feature = "tracing", tracing::instrument)]
