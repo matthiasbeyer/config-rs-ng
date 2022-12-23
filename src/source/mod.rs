@@ -36,10 +36,10 @@ pub(crate) mod test_source {
     use crate::description::ConfigSourceDescription;
     use crate::element::ConfigElement;
     use crate::object::ConfigObject;
-    #[cfg(not(feature = "async"))]
-    use crate::source::ConfigSource;
     #[cfg(feature = "async")]
     use crate::source::AsyncConfigSource;
+    #[cfg(not(feature = "async"))]
+    use crate::source::ConfigSource;
 
     use super::SourceError;
 
