@@ -65,6 +65,7 @@ fn test_reloading() {
 
     fn assert_key_val(config: &Config, key: &str, val: &str) {
         let value = config
+            .layers()
             .get(key)
             .expect("Accessing configuration object")
             .expect(&format!("Finding '{}' in configuration object", key));
@@ -79,6 +80,7 @@ fn test_reloading() {
     assert_key_val(&config, "key3", "valueB");
     assert!({
         config
+            .layers()
             .get("key4")
             .expect("Accessing configuration object")
             .is_none()
@@ -91,6 +93,7 @@ fn test_reloading() {
     assert_key_val(&config, "key4", "valueC");
     assert!({
         config
+            .layers()
             .get("key3")
             .expect("Accessing configuration object")
             .is_none()

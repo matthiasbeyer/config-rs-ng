@@ -2,10 +2,11 @@ use futures::stream::FuturesUnordered;
 
 use crate::{
     source::{AsyncConfigSource, SourceError},
-    AsyncConfig, ConfigObject,
+    AsyncConfig,
 };
 
 use super::ConfigError;
+use crate::config::layers::Layers;
 
 #[derive(Debug)]
 pub struct AsyncConfigBuilder {
@@ -44,7 +45,7 @@ impl AsyncConfigBuilder {
     }
 
     #[cfg_attr(feature = "tracing", tracing::instrument)]
-    pub(crate) async fn reload(&self) -> Result<Vec<ConfigObject>, SourceError> {
+    pub(crate) async fn reload(&self) -> Result<Layers, SourceError> {
         use futures::StreamExt;
 
         let overrides = self
@@ -90,6 +91,6 @@ impl AsyncConfigBuilder {
             .into_iter()
             .chain(layers.into_iter())
             .chain(defaults.into_iter())
-            .collect()
+            .collect::<Result<Layers, _>>()
     }
 }

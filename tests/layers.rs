@@ -33,6 +33,7 @@ fn test_layers_simple() {
 
     {
         let value = config
+            .layers()
             .get("key1")
             .expect("Accessing configuration object")
             .expect("Finding 'key' in configuration object");
@@ -43,6 +44,7 @@ fn test_layers_simple() {
     }
     {
         let value = config
+            .layers()
             .get("key2")
             .expect("Accessing configuration object")
             .expect("Finding 'key' in configuration object");
@@ -53,6 +55,7 @@ fn test_layers_simple() {
     }
     {
         let value = config
+            .layers()
             .get("key3")
             .expect("Accessing configuration object")
             .expect("Finding 'key' in configuration object");

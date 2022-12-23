@@ -23,6 +23,7 @@ async fn run_example() {
         .expect("Building configuration object");
 
     let key = config
+        .layers()
         .get("foo")
         .expect("Accessing configuration object")
         .expect("Finding 'key' in configuration object");
