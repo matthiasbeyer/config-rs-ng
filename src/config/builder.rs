@@ -1,9 +1,9 @@
 use crate::config::Config;
-use crate::object::ConfigObject;
 use crate::source::ConfigSource;
 use crate::source::SourceError;
 
 use super::ConfigError;
+use crate::config::layers::Layers;
 
 #[derive(Debug)]
 pub struct ConfigBuilder {
@@ -42,7 +42,7 @@ impl ConfigBuilder {
     }
 
     #[cfg_attr(feature = "tracing", tracing::instrument)]
-    pub(crate) fn reload(&self) -> Result<Vec<ConfigObject>, SourceError> {
+    pub(crate) fn reload(&self) -> Result<Layers, SourceError> {
         self.overwrites_builders
             .iter()
             .map(|cs| cs.load())

@@ -1,19 +1,23 @@
 #[cfg(feature = "async")]
 mod async_builder;
-#[cfg(not(feature = "async"))]
+#[cfg(feature = "async")]
+mod async_config;
 mod builder;
 #[allow(clippy::module_inception)]
 mod config;
 mod error;
+mod layers;
 
 #[cfg(feature = "async")]
 pub use crate::config::async_builder::*;
-#[cfg(not(feature = "async"))]
+#[cfg(feature = "async")]
+pub use crate::config::async_config::*;
 pub use crate::config::builder::*;
 pub use crate::config::config::*;
 pub use crate::config::error::*;
+pub use crate::config::layers::Layers;
 
-#[cfg(all(test, not(feature = "async")))]
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -57,7 +61,7 @@ mod tests {
 
         let c = Config::builder().load(Box::new(source)).build().unwrap();
 
-        let r = c.get("key");
+        let r = c.layers().get("key");
         assert!(r.is_ok());
         let r = r.unwrap();
         assert!(r.is_some());
@@ -92,7 +96,7 @@ mod tests {
             .build()
             .unwrap();
 
-        let r = c.get("key1");
+        let r = c.layers().get("key1");
         assert!(r.is_ok());
         let r = r.unwrap();
         assert!(r.is_some());
@@ -100,7 +104,7 @@ mod tests {
         assert!(r.is_str());
         assert_eq!(r.as_str().unwrap(), "value2");
 
-        let r = c.get("key2");
+        let r = c.layers().get("key2");
         assert!(r.is_ok());
         let r = r.unwrap();
         assert!(r.is_some());
@@ -136,7 +140,7 @@ mod tests {
             .build()
             .unwrap();
 
-        let r = c.get("key1");
+        let r = c.layers().get("key1");
         assert!(r.is_ok());
         let r = r.unwrap();
         assert!(r.is_some());
@@ -144,7 +148,7 @@ mod tests {
         assert!(r.is_str());
         assert_eq!(r.as_str().unwrap(), "value2");
 
-        let r = c.get("key2");
+        let r = c.layers().get("key2");
         assert!(r.is_ok());
         let r = r.unwrap();
         assert!(r.is_some());

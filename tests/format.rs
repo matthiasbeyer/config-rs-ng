@@ -186,6 +186,7 @@ fn test_format_custom() {
     {
         // Lets get a serde_json::Value object by accessing "key1" from above
         if let Some(json_object) = config
+            .layers()
             .get_as::<_, serde_json::Value>("key1")
             .expect("Accessing configuration object")
         {
@@ -201,6 +202,7 @@ fn test_format_custom() {
         //
         // This value has shadowed the "key2" from the JSON part of our config object!
         if let Some(custom_object) = config
+            .layers()
             .get_as::<_, CustomValue>("key2")
             .expect("Accessing configuration object")
         {
