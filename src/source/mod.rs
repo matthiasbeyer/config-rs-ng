@@ -44,6 +44,8 @@ pub(crate) mod test_source {
     use crate::description::ConfigSourceDescription;
     use crate::element::ConfigElement;
     use crate::object::ConfigObject;
+    #[cfg(feature = "async")]
+    use crate::source::AsyncConfigSource;
     use crate::source::ConfigSource;
 
     use super::SourceError;
@@ -56,6 +58,20 @@ pub(crate) mod test_source {
         T: ConfigElement + Clone,
     {
         fn load(&self) -> Result<ConfigObject, SourceError> {
+            Ok(ConfigObject::new(
+                Box::new(self.0.clone()),
+                ConfigSourceDescription::Unknown,
+            ))
+        }
+    }
+
+    #[cfg(feature = "async")]
+    #[async_trait::async_trait]
+    impl<T> AsyncConfigSource for TestSource<T>
+    where
+        T: ConfigElement + Clone,
+    {
+        async fn load_async(&self) -> Result<ConfigObject, SourceError> {
             Ok(ConfigObject::new(
                 Box::new(self.0.clone()),
                 ConfigSourceDescription::Unknown,
