@@ -29,6 +29,7 @@ impl FormatParser for TomlFormatParser {
     type Output = toml::Value;
 
     fn parse(buffer: Vec<u8>) -> Result<Self::Output, SourceError> {
-        toml::from_slice(&buffer).map_err(SourceError::TomlParserError)
+        let buffer = String::from_utf8(buffer).map_err(SourceError::from)?;
+        toml::from_str(&buffer).map_err(SourceError::TomlParserError)
     }
 }

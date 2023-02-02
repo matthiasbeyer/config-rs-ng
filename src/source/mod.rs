@@ -29,6 +29,10 @@ pub enum SourceError {
     #[cfg(feature = "toml")]
     #[error("TOML Parser error")]
     TomlParserError(#[from] toml::de::Error),
+
+    #[cfg(feature = "toml")]
+    #[error("UTF8 Error")]
+    Utf8(#[from] std::string::FromUtf8Error),
 }
 
 #[cfg(test)]
