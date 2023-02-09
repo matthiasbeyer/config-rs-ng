@@ -26,7 +26,7 @@ impl ConfigElement for Value {
     }
 
     fn is_i64(&self) -> bool {
-        self.as_i64().filter(|i| *i < (i64::MAX as i64)).is_some()
+        self.as_i64().filter(|i| *i < i64::MAX).is_some()
     }
 
     fn is_u8(&self) -> bool {

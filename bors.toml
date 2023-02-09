@@ -1,6 +1,7 @@
 # Must pass on the merge with the master branch
 status = [
-    "CI"
+    "CI",
+    "flake-CI",
 ]
 
 cut_body_after = "<details>"

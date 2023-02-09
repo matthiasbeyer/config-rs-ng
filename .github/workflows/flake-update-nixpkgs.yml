@@ -1,0 +1,30 @@
+name: "Update 'nixpkgs' input"
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  schedule:
+    # 03:15 every 1st of the month
+    - cron:  '15 3 1 * *'
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v18
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - uses: cachix/cachix-action@v12
+        with:
+          name: deskodon
+          # If you chose API tokens for write access OR if you have a private cache
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@v15
+        with:
+          pr-title: "Update nixpkgs in flake.lock" # Title of PR to be created
+          inputs: nixpkgs
