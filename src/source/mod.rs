@@ -10,8 +10,12 @@ mod string;
 pub use crate::source::async_source::AsyncConfigSource;
 pub use crate::source::file::FileSource;
 pub use crate::source::format::FormatParser;
-pub use crate::source::format::JsonFormatParser;
 pub use crate::source::string::StringSource;
+
+#[cfg(feature = "json")]
+pub use crate::source::format::JsonFormatParser;
+#[cfg(feature = "toml")]
+pub use crate::source::format::TomlFormatParser;
 
 pub trait ConfigSource: std::fmt::Debug {
     fn load(&self) -> Result<ConfigObject, SourceError>;
