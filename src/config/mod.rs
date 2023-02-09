@@ -5,6 +5,7 @@ mod async_config;
 mod builder;
 #[allow(clippy::module_inception)]
 mod config;
+mod construct;
 mod error;
 mod layers;
 
