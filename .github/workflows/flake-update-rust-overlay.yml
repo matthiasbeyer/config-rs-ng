@@ -24,7 +24,7 @@ jobs:
           # If you chose API tokens for write access OR if you have a private cache
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Update flake.lock
-        uses: DeterminateSystems/update-flake-lock@v15
+        uses: DeterminateSystems/update-flake-lock@v16
         with:
           pr-title: "Update rust-overlay in flake.lock" # Title of PR to be created
           inputs: rust-overlay
