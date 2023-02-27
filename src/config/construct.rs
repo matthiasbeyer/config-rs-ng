@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::ConfigElement;
 
-use super::Layers;
+use super::{ConfigError, Layers};
 
 pub trait ConfigConstructor
 where
@@ -32,6 +32,9 @@ pub enum FromConfigElementError {
 
     #[error("Element for member {name}: {ty} not found")]
     NoElement { name: String, ty: String },
+
+    #[error(transparent)]
+    ConfigError(#[from] ConfigError),
 }
 
 macro_rules! impl_from_config_element {
