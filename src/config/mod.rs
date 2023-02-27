@@ -5,6 +5,7 @@ mod async_config;
 mod builder;
 #[allow(clippy::module_inception)]
 mod config;
+mod construct;
 mod error;
 mod layers;
 
@@ -14,6 +15,7 @@ pub use crate::config::async_builder::*;
 pub use crate::config::async_config::*;
 pub use crate::config::builder::*;
 pub use crate::config::config::*;
+pub use crate::config::construct::*;
 pub use crate::config::error::*;
 pub use crate::config::layers::Layers;
 

@@ -323,6 +323,28 @@ pub enum ConfigElementType {
     Map,
 }
 
+impl ConfigElementType {
+    pub(crate) fn name(&self) -> &'static str {
+        match self {
+            ConfigElementType::Null => "null",
+            ConfigElementType::Bool => "bool",
+            ConfigElementType::I8 => "i8",
+            ConfigElementType::I16 => "i16",
+            ConfigElementType::I32 => "i32",
+            ConfigElementType::I64 => "i64",
+            ConfigElementType::U8 => "u8",
+            ConfigElementType::U16 => "u16",
+            ConfigElementType::U32 => "u32",
+            ConfigElementType::U64 => "u64",
+            ConfigElementType::F32 => "f32",
+            ConfigElementType::F64 => "f64",
+            ConfigElementType::Str => "str",
+            ConfigElementType::List => "list",
+            ConfigElementType::Map => "map",
+        }
+    }
+}
+
 downcast_rs::impl_downcast!(sync ConfigElement);
 
 static_assertions::assert_obj_safe!(ConfigElement);

@@ -5,6 +5,8 @@ mod element;
 mod object;
 mod source;
 
+pub use config_rs_ng_derive::ConfigConstructor;
+
 pub use crate::accessor::AccessType;
 pub use crate::accessor::Accessor;
 pub use crate::accessor::ParsableAccessor;
@@ -14,6 +16,10 @@ pub use crate::config::AsyncConfig;
 pub use crate::config::AsyncConfigBuilder;
 pub use crate::config::Config;
 pub use crate::config::ConfigBuilder;
+pub use crate::config::ConfigConstructor;
+pub use crate::config::FromConfigElement;
+pub use crate::config::FromConfigElementError;
+pub use crate::config::Layers;
 pub use crate::description::ConfigSourceDescription;
 pub use crate::element::ConfigElement;
 pub use crate::element::ConfigElementListType;
