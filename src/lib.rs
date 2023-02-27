@@ -16,6 +16,7 @@ pub use crate::config::Config;
 pub use crate::config::ConfigBuilder;
 pub use crate::config::ConfigConstructor;
 pub use crate::config::FromConfigElement;
+pub use crate::config::FromConfigElementError;
 pub use crate::config::Layers;
 pub use crate::description::ConfigSourceDescription;
 pub use crate::element::ConfigElement;
