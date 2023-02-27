@@ -29,6 +29,9 @@ pub enum FromConfigElementError {
         expected: &'static str,
         found: &'static str,
     },
+
+    #[error("Element for member {name}: {ty} not found")]
+    NoElement { name: String, ty: String },
 }
 
 macro_rules! impl_from_config_element {
