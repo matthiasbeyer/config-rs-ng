@@ -5,6 +5,8 @@ mod element;
 mod object;
 mod source;
 
+pub use config_rs_ng_derive::ConfigConstructor;
+
 pub use crate::accessor::AccessType;
 pub use crate::accessor::Accessor;
 pub use crate::accessor::ParsableAccessor;
