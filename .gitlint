@@ -120,7 +120,7 @@ contrib=CC1, CC2
 [ignore-by-author-name]
 # Ignore certain rules for commits of which the author name matches a regex
 # E.g. Match commits made by dependabot
-regex=(.*)dependabot(.*)
+regex=(.*)dependabot(.*)|github-actions\[bot\]
 #
 # Ignore certain rules, you can reference them by their id or by their full name
 # Use 'all' to ignore all rules
