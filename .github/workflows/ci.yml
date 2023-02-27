@@ -20,7 +20,10 @@ jobs:
           - stable
           - beta
           # - nightly
-
+    # required because we have a different toolchain than {{ matrix.rust }} in
+    # rust-toolchain.toml, which we use for the flake.nix
+    env:
+      RUSTUP_TOOLCHAIN: ${{ matrix.rust }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -58,6 +61,11 @@ jobs:
     name: format
     runs-on: ubuntu-latest
 
+    # required because we have a different toolchain than {{ matrix.rust }} in
+    # rust-toolchain.toml, which we use for the flake.nix
+    env:
+      RUSTUP_TOOLCHAIN: 1.60.0
+
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@master
@@ -78,6 +86,10 @@ jobs:
           - stable
           - beta
           # - nightly
+    # required because we have a different toolchain than {{ matrix.rust }} in
+    # rust-toolchain.toml, which we use for the flake.nix
+    env:
+      RUSTUP_TOOLCHAIN: ${{ matrix.rust }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -95,6 +107,10 @@ jobs:
   clippy:
     name: clippy
     runs-on: ubuntu-latest
+    # required because we have a different toolchain than {{ matrix.rust }} in
+    # rust-toolchain.toml, which we use for the flake.nix
+    env:
+      RUSTUP_TOOLCHAIN: 1.60.0
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@master
