@@ -28,3 +28,6 @@ pub use crate::source::StringSource;
 
 #[cfg(feature = "json")]
 pub use crate::source::JsonFormatParser;
+
+#[cfg(feature = "toml")]
+pub use crate::source::TomlFormatParser;
