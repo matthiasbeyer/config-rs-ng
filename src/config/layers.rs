@@ -5,6 +5,13 @@ use crate::object::ConfigObject;
 use crate::object::ConfigView;
 use crate::ParsableAccessor;
 
+/// The [Layers] type represents the loaded layers of a configuration
+///
+/// This type represents the loaded layers of a configuration. It can be used to access a
+/// particular configuration value using an [Accessor] or something that can be parsed into an
+/// [Accessor] using the [ParsableAccessor] trait.
+///
+/// An instance of this type holds all parsed configuration values (via [ConfigObject]s).
 #[derive(Debug)]
 pub struct Layers(Vec<ConfigObject>);
 
