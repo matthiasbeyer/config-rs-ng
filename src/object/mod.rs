@@ -2,6 +2,13 @@ use crate::accessor::Accessor;
 use crate::description::ConfigSourceDescription;
 use crate::element::ConfigElement;
 
+/// A [ConfigObject] is a parsed piece of configuration
+///
+/// An instance of this type holds a [ConfigElement], which is a parsed representation of a piece
+/// of configuration. For example, loading a File from disc and parsing it with a TOML parser will
+/// result in a [ConfigElement] (or rather, a tree of [ConfigElement]s).
+/// The [ConfigObject] instance encapsulates that [ConfigElement] tree as well as metadata for that
+/// tree of configuration data.
 #[derive(Debug)]
 pub struct ConfigObject {
     element: Box<dyn ConfigElement>,
