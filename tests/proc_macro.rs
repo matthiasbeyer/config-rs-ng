@@ -5,7 +5,7 @@ use config_rs_ng::ConfigConstructor;
 use config_rs_ng::StringSource;
 use config_rs_ng::TomlFormatParser;
 
-#[derive(Debug, config_rs_ng::ConfigConstructor)]
+#[derive(Debug, config_rs_ng::ConfigConstructor, config_rs_ng::FromConfigElement)]
 struct SimpleConfig {
     s: String,
 }
@@ -32,32 +32,6 @@ struct OtherConfig {
     optional: Option<i32>,
 
     simple: SimpleConfig,
-}
-
-impl config_rs_ng::FromConfigElement for SimpleConfig {
-    type Error = config_rs_ng::FromConfigElementError;
-
-    fn from_config_element(element: &dyn config_rs_ng::ConfigElement) -> Result<Self, Self::Error> {
-        let map = element.as_map().ok_or_else(|| {
-            let found = element.get_type().name();
-            config_rs_ng::FromConfigElementError::TypeError {
-                expected: "map",
-                found,
-            }
-        })?;
-
-        Ok({
-            Self {
-                s: map
-                    .get("s")
-                    .ok_or_else(|| config_rs_ng::FromConfigElementError::NoElement {
-                        name: "s".to_string(),
-                        ty: "String".to_string(),
-                    })
-                    .and_then(String::from_config_element)?
-            }
-        })
-    }
 }
 
 const OTHER_CONFIG: &str = r#"
