@@ -1,3 +1,8 @@
+/// Implemented by types that can be parsed to [Accessor]
+///
+/// Convenience-implementations exist for `&str` and `String`, but the parsing implementation is
+/// rather simple. Users might want to roll their own parsers for their custom accessors for more
+/// sophisticated accessor markup.
 pub trait ParsableAccessor {
     fn parse(&self) -> Result<Accessor, AccessorParseError>;
 }
@@ -27,6 +32,10 @@ impl ParsableAccessor for String {
     }
 }
 
+/// An object that can be used to grab into a [Layers] and get a value from it
+///
+/// An instance of this type can be used to access a configuration value from a [Layers] instance
+/// (that one retrieves via [Config::layers]).
 pub struct Accessor {
     stack: Vec<AccessType>,
     index: usize,
