@@ -324,7 +324,7 @@ pub enum ConfigElementType {
 }
 
 impl ConfigElementType {
-    pub(crate) fn name(&self) -> &'static str {
+    pub fn name(&self) -> &'static str {
         match self {
             ConfigElementType::Null => "null",
             ConfigElementType::Bool => "bool",

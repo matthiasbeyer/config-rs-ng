@@ -81,6 +81,21 @@ impl FromConfigElement for String {
     }
 }
 
+impl<T> FromConfigElement for Option<T>
+where
+    T: FromConfigElement<Error = FromConfigElementError>,
+{
+    type Error = FromConfigElementError;
+
+    fn from_config_element(element: &dyn ConfigElement) -> Result<Self, Self::Error> {
+        if element.is_null() {
+            Ok(None)
+        } else {
+            T::from_config_element(element).map(Some)
+        }
+    }
+}
+
 impl<T> FromConfigElement for Vec<T>
 where
     T: FromConfigElement<Error = FromConfigElementError>,
