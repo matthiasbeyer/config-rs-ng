@@ -17,12 +17,23 @@ pub use crate::source::format::JsonFormatParser;
 #[cfg(feature = "toml")]
 pub use crate::source::format::TomlFormatParser;
 
+/// A source of a configuration that can be loaded
+///
+/// # Note
+///
+/// See [AsyncConfigSource](crate::AsyncConfigSource) for an async variant of this trait.
+///
 pub trait ConfigSource: std::fmt::Debug {
     fn load(&self) -> Result<ConfigObject, SourceError>;
 }
 
+/// An error that could happen while loading a source of a configuration
 #[derive(Debug, thiserror::Error)]
+#[non_exhaustive]
 pub enum SourceError {
+    #[error(transparent)]
+    Custom(#[from] Box<dyn std::error::Error>),
+
     #[error("IO Error")]
     Io(#[from] std::io::Error),
 
