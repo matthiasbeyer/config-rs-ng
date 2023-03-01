@@ -27,6 +27,7 @@ pub trait ConfigSource: std::fmt::Debug {
     fn load(&self) -> Result<ConfigObject, SourceError>;
 }
 
+/// An error that could happen while loading a source of a configuration
 #[derive(Debug, thiserror::Error)]
 pub enum SourceError {
     #[error("IO Error")]
