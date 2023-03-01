@@ -1,4 +1,5 @@
 #[derive(Debug, thiserror::Error)]
+#[non_exhaustive]
 pub enum ConfigError {
     #[error("Accessor parser error")]
     AccessorParseError(#[from] crate::accessor::AccessorParseError),

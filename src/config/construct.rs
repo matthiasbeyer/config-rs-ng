@@ -23,6 +23,7 @@ where
 }
 
 #[derive(Debug, thiserror::Error)]
+#[non_exhaustive]
 pub enum FromConfigElementError {
     #[error("Type error. Expected '{expected}', got '{found}'")]
     TypeError {

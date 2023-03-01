@@ -22,6 +22,7 @@ pub trait ConfigSource: std::fmt::Debug {
 }
 
 #[derive(Debug, thiserror::Error)]
+#[non_exhaustive]
 pub enum SourceError {
     #[error("IO Error")]
     Io(#[from] std::io::Error),
