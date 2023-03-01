@@ -23,6 +23,9 @@ pub trait ConfigSource: std::fmt::Debug {
 
 #[derive(Debug, thiserror::Error)]
 pub enum SourceError {
+    #[error(transparent)]
+    Custom(#[from] Box<dyn std::error::Error>),
+
     #[error("IO Error")]
     Io(#[from] std::io::Error),
 
