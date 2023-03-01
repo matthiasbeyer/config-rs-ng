@@ -17,6 +17,12 @@ pub use crate::source::format::JsonFormatParser;
 #[cfg(feature = "toml")]
 pub use crate::source::format::TomlFormatParser;
 
+/// A source of a configuration that can be loaded
+///
+/// # Note
+///
+/// See [AsyncConfigSource](crate::AsyncConfigSource) for an async variant of this trait.
+///
 pub trait ConfigSource: std::fmt::Debug {
     fn load(&self) -> Result<ConfigObject, SourceError>;
 }
