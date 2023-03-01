@@ -24,6 +24,9 @@ where
 
 #[derive(Debug, thiserror::Error)]
 pub enum FromConfigElementError {
+    #[error(transparent)]
+    Custom(#[from] Box<dyn std::error::Error>),
+
     #[error("Type error. Expected '{expected}', got '{found}'")]
     TypeError {
         expected: &'static str,
