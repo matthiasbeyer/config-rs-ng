@@ -33,9 +33,9 @@ jobs:
           toolchain: ${{ matrix.rust }}
       - uses: swatinem/rust-cache@v2
       - name: cargo-check
-        run: cargo check --tests --examples
+        run: cargo check --locked --tests --examples
       - name: cargo-check for async
-        run: cargo check --tests --examples --features async
+        run: cargo check --locked --tests --examples --features async
 
   deny:
     name: deny
