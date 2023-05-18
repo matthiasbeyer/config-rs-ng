@@ -121,4 +121,15 @@ impl Layers {
 
         Ok(None)
     }
+
+    /// Iterate over the individual layers
+    ///
+    /// This function returns an iterator that can be used to iterate over the individual layers of
+    /// the configuration.
+    ///
+    /// This is useful if you want to access all values of each layer (even the shadowed ones) for
+    /// example for debug analysis of the loaded configuration values.
+    pub fn iter(&self) -> impl Iterator<Item = &ConfigObject> {
+        self.0.iter()
+    }
 }
