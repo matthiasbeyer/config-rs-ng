@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::collections::HashMap;
 
 use crate::ConfigElement;
@@ -142,5 +143,27 @@ where
             .into_iter()
             .map(|key| T::from_config_element(map.get(&key).unwrap()).map(|val| (key, val)))
             .collect::<Result<HashMap<String, T>, _>>()
+    }
+}
+
+impl<T> FromConfigElement for BTreeMap<String, T>
+where
+    T: FromConfigElement<Error = FromConfigElementError>,
+{
+    type Error = FromConfigElementError;
+
+    fn from_config_element(element: &dyn ConfigElement) -> Result<Self, Self::Error> {
+        let map = element.as_map().ok_or_else(|| {
+            let found = element.get_type().name();
+            FromConfigElementError::TypeError {
+                expected: "map",
+                found,
+            }
+        })?;
+
+        map.keys()
+            .into_iter()
+            .map(|key| T::from_config_element(map.get(&key).unwrap()).map(|val| (key, val)))
+            .collect::<Result<BTreeMap<String, T>, _>>()
     }
 }
