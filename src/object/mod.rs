@@ -50,6 +50,11 @@ impl ConfigObject {
             Ok(None)
         }
     }
+
+    /// Get the configuration element that the object wraps
+    pub fn element(&self) -> &dyn ConfigElement {
+        &*self.element
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
